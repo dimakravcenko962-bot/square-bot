@@ -1,0 +1,31 @@
+import os
+import asyncio
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters import Command
+
+# Отримання токена з параметрів середовища
+bot = Bot(token=os.getenv("BOT_TOKEN"))
+dp = Dispatcher()
+
+@dp.message(Command("start"))
+async def cmd_start(message: types.Message):
+    await message.answer("Привіт! Я ваш новий бот для Binance Square. Готовий до роботи!")
+
+@dp.message()
+async def handle_message(message: types.Message):
+    if not message.text:
+        return
+
+    text = message.text.lower()
+
+    if "пост" in text:
+        await message.answer("📝 Готую ідею для поста...")
+    elif "аналіз" in text:
+        await message.answer("📊 Роблю аналіз ринку...")
+
+async def main():
+    # drop_pending_updates=True автоматично скидає старі сесії та запобігає конфліктам
+    await dp.start_polling(bot, drop_pending_updates=True)
+
+if __name__ == "__main__":
+    asyncio.run(main())
